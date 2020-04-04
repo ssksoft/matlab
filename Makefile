@@ -7,7 +7,7 @@ b.exe: main_dllcaller.o gain.dll
 main_dllcaller.o: main_dllcaller.c
 	gcc -c $?
 
-gain.dll: gain.o
+gain.dll: gain.o init.c
 	gcc $? -o $@ -shared
 
 a.exe: main.o gain.o
