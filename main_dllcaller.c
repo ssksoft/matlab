@@ -8,23 +8,26 @@ int *x_ptr;
 int *y_ptr;
 int (*gain)(void);
 int (*init)(void);
-
+void *handleLib;
 int main(void)
 {
-    printf("Hello\n");
-    void *handleLib;
+
+    printf("HelloMain\n");
+
     handleLib = LOADLIB("gain.dll");
     init = (int (*)(void))GETSYMBOLADDR(handleLib, "init");
     gain = (int (*)(void))GETSYMBOLADDR(handleLib, "gain");
     x_ptr = (int *)GETSYMBOLADDR(handleLib, "x");
     y_ptr = (int *)GETSYMBOLADDR(handleLib, "y");
 
-    printf("x=%d\n", *x_ptr);
+    printf("addr_x = %d\n", x_ptr);
+    printf("val_x = %d\n", *x_ptr);
 
     if (init && gain)
     {
         printf("notnull\n");
         init();
+        printf("val_init_x in main = %d\n", *x_ptr);
         *x_ptr = 2;
         gain();
     }
