@@ -1,2 +1,2 @@
-int gain(void);
 int init(void);
+int gain(void);
