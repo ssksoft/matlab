@@ -1,5 +1,5 @@
-loadlibrary('gain.dll');
-libfunctionsview gain
-% calllib('gain.dll','init')
+loadlibrary('gain.dll','gain.h');
+calllib('gain','init')
+calllib('gain','gain')
 % 
 unloadlibrary gain
