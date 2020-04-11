@@ -1,36 +1,37 @@
 clear all;
 
-%% 全テストモデルのファイルパスを取得
-slx_path_all = {'TEST_sample.slx','TEST_sample2_NG.slx'}
-
+%% 全テストモデルのファイルパスを取得する
+%% テストモデルslxが記載されたcsvファイルを読み込む
+filenames = readtable('filename_test_slx.csv','ReadVariableNames',true, 'Delimiter', ',');
 %% i個目のテストモデルを実行
-num_slx = length(slx_path_all);
+num_slx = length(filenames.Variables);
 for i=1:1:num_slx
-    slx_path = slx_path_all{i};
+    filename_cell = filenames(i,'filename').Variables;
+    filename = filename_cell{1};
     
-    %% テストモデルの読み込み
-    load_system(slx_path)
+    %% テストモデルslxを読み込む
+    load_system(filename)
     
-    %% 全ブロックのpathを抽出
-    all_block_path = find_system()
+    %% 全ブロックのpathを抽出する
+    all_block_path = find_system();
     
-    %% 'Builder'を含むブロックpathのindexを取得
+    %% 'Builder'を含むブロックpathのindexを取得する
     str_search_result = strfind(all_block_path, 'Builder');
     empty_cell = cellfun(@isempty, str_search_result);
     index_signal_builder = find(~empty_cell);
     
-    %% Signal Builderのpathを取得
-    path_signal_builder = all_block_path{index_signal_builder}
+    %% Signal Builderのpathを取得する
+    path_signal_builder = all_block_path{index_signal_builder};
     
-    %% Signal BuilderのGroup数を取得
+    %% Signal BuilderのGroup数を取得する
     [time,data,signames,groupnames] = signalbuilder(path_signal_builder);
     num_group = length(groupnames);
     
-    %% Group1からGroup num_groupまでシミュレーション実行
+    %% Group1からGroup num_groupまでシミュレーション実行する
     
     for j=1:1:num_group
         signalbuilder(path_signal_builder, 'activegroup',j);
-        sim(slx_path);
+        sim(filename);
     end
     
 end
