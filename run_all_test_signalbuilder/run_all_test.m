@@ -10,13 +10,14 @@ num_slx = length(filenames.Variables);
 pass = 1;
 for i=1:1:num_slx
     filename_cell = filenames(i,'filename').Variables;
-    filename = filename_cell{1};
+    filename_extension = filename_cell{1};
+    filename = erase(filename_extension, '.slx');
     
     %% テストモデルslxを読み込む
     load_system(filename)
     
     %% 全ブロックのpathを抽出する
-    all_block_path = find_system();
+    all_block_path = find_system(filename);
     
     %% 'Builder'を含むブロックpathのindexを取得する
     str_search_result = strfind(all_block_path, 'Builder');
@@ -43,10 +44,11 @@ for i=1:1:num_slx
     catch ME
         % テスト合格ファイル名への追加をしない
         % assertionエラーメッセージの表示
-        display(ME.message)
+        disp(ME.message)
     end
+    close_system(filename,0)
 end
-display(msg_create_report)
+disp(msg_create_report)
 
 %% テストレポート生成
 report_contents_header = {'filename'};
