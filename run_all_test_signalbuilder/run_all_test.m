@@ -24,6 +24,12 @@ for i=1:1:num_slx
     empty_cell = cellfun(@isempty, str_search_result);
     index_signal_builder = find(~empty_cell);
     
+    %% Signal Builderブロックが2つ以上存在する場合、テスト不合格とする
+    num_signalbuilder = length(index_signal_builder);
+    if num_signalbuilder > 1
+        continue;
+    end
+    
     %% Signal Builderのpathを取得する
     path_signal_builder = all_block_path{index_signal_builder};
     
